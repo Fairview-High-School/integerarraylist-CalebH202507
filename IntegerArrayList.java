@@ -7,6 +7,8 @@ public class IntegerArrayList implements IntegerList{
         size = 0;
     }
    
+    
+
     public void add(Integer val){
         if(size >= data.length){
             Integer[] bigger = new Integer[data.length*2];
@@ -21,10 +23,28 @@ public class IntegerArrayList implements IntegerList{
     }
 
     public void add(int index, Integer val){
-        data[index] = val;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException("Index:" + index);
+        }
+        Integer[] temp = new Integer[data.length*2];
+        for(int i = 0; i<index; i++){
+            temp[i] = data[i];
+        }
+        
+        temp[index] = val;
+        
+        for(int j = index+1; j<data.length+1; j++){
+            temp[j] = data[j-1];
+        }
+        size++;
+        data = temp;
     }
 
     public void set(int index, Integer val){
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException("Index:" + index);
+        }
+        data[index] = val;
 
     }
     public void clear(){
@@ -36,7 +56,22 @@ public class IntegerArrayList implements IntegerList{
 
     }
     public Integer remove(int index){
-        return -1;
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException("Index:" + index);
+        }
+        Integer value = data[index];
+        Integer[] temp = new Integer[data.length-1];
+        for(int i = 0; i<index; i++){
+            temp[i] = data[i];
+            
+        }
+        for(int j = index; j<data.length-1; j++){
+            temp[j] = data[j+1];
+            
+        }
+        data = temp;
+        size--;
+        return value;
     }
     public Integer get(int index){
         if(index < 0 || index >= size){
@@ -45,19 +80,42 @@ public class IntegerArrayList implements IntegerList{
         return data[index];
     }
     public int size(){
-        return -1;
+        return size;
     }
     public boolean isEmpty(){
-        return false;
+        if(size == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     public boolean contains(Integer val){
-        return false;
+        boolean num = false;
+        for(int i = 0; i<size; i++){
+            if(data[i] == val){
+                num = true;
+            }
+        }
+        return num;
     }
     public int indexOf(Integer val){
-        return -1;
+        int num = -1;
+        for(int i = 0; i<size; i++){
+            if(data[i] == val){
+                num = i;
+            }
+        }
+        return num;
+
     }
     public boolean equals(List<Integer> other){
-        return false;
+        for(int i = 0; i<size; i++){
+            if(other.get(i) != data[i]){
+                return false;
+            }
+        }
+        return true;
     }
     public String toString(){
         String result = "[";
